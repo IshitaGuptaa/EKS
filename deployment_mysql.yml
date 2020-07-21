@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql-dp
+spec:
+  selector: 
+    app: mysql
+  ports: 
+  - port: 3306 
+  clusterIP: None
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: mysql-dp
+
+spec:
+  strategy:
+    type: Recreate 
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+      time : prac
+  template: 
+    metadata: 
+      name: mysql-pod
+      labels: 
+        app: mysql
+        time: prac   
+    spec:
+      containers:
+      - name: con1
+        image: mysql
+        env:
+         - name: MYSQL_ROOT_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: kustom-db
+               key: syspass
+         - name: MYSQL_DATABASE
+           value: mysql1
+         - name: MYSQL_USER
+           valueFrom:
+             secretKeyRef: 
+               name: kustom-db
+               key: username
+         - name: MYSQL_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: kustom-db
+               key: password
+        volumeMounts:
+              - name: vol1
+                mountPath: /var/lib/mysql
+        ports:
+        - containerPort: 3306
+          name: mysql 
+      volumes: 
+      
+       - persistentVolumeClaim:
+           claimName: mypvc1
+         name: vol1 
+
+
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sceks
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+reclaimPolicy: Retain
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc1
+spec:
+  storageClassName: sceks
+  accessModes:
+   - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 20Gi

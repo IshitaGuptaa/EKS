@@ -29,4 +29,27 @@ STEP5: apply cluster.yml, this will call cloud formation in backgroud (teraform 
 // To store the output in a file for later reference we can also use tee command
 	command: eksctl create cluster -f cluster.yml | tee output.txt
 
-STEP5: 
+STEP5: You can check the cluster-info and config view of kubectl using following commad
+
+	command: kubectl config view
+	command: kubectl cluster-info
+
+STEP6: update configuration of aws using follwoing command
+
+	commad: aws update-kubeconfig --name IishitaCluster1 
+Configures kubectl so that you can connect to an Amazon EKS cluster.
+
+STEP7: Create your own namespace
+
+	command: kubectl create namespace eksdemo
+note: the namespace should be all small letters
+
+STEP8: Now in the config file we can also setup what namespace we will be using by default, we set this info in the context block, either we go inside config file and change it manually or we use cli command
+
+	command: kubectl config set-context --current --namespace=eksdemo
+// That is in the current context set this namespace as default.
+
+STEP9: Now our basic setup is ready , but let's make it more efficient. We can add spo-instance in our system. which will be like a alarm or metric on instance, such that if instance exceeds certain limit mentioned , then it will either stop, terminate or hibernate the system. This is very cost efficient.
+
+
+{NOTE:  TO DELETE CLUSTER USE     "eksctl delete cluster --region=ap-south-1 --name=IshitaCluster1", DELETE SSH KEYS MANUALLY IN AWS WEB UI}

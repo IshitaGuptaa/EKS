@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: serviceword
+spec:
+  selector:
+    app: wordpress
+  type: LoadBalancer
+  ports: 
+   - port: 80
+     nodePort: 30008
+        
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: wordpress-dp
+
+spec: 
+  strategy:
+    type: Recreate
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wordpress
+      time : prac
+  template: 
+    metadata: 
+      name: wordpress-pod
+      labels: 
+        app: wordpress
+        time: prac   
+    spec:
+      containers:
+      - name: con1
+        image: wordpress
+        env: 
+        - name: WORDPRESS_DB_HOST
+          value: mysql-dp
+        - name: WORDPRESS_DB_USER
+          valueFrom:  
+            secretKeyRef:
+               name: kustom-db
+               key: username
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom: 
+            secretKeyRef: 
+               name: kustom-db
+               key: password
+        - name: WORDPRESS_DB_NAME
+          value: mysql1  
+        - name: WORDPRESS_TABLE_PREFIX
+          value: db_info
+        - name: WORDPRESS_DEBUG
+          value: "1"
+        ports: 
+        - name: wordpress
+          containerPort: 80
+
+

@@ -16,3 +16,17 @@ nodeGroups:
     instanceType: t2.small
     ssh:
        publicKeyPath: ~/.ssh/Ishitaeks.pub
+
+
+  - name: ng3
+    minSize: 2
+    maxSize: 5
+    instancesDistribution: 
+        maxPrice: 0.017
+        instanceTypes: ["t3.micro,t3.small"]
+        onDemandBaseCapacity: 0
+        onDemandPercentageAboveBaseCapacity: 50
+        spotInstancePools: 2
+    ssh:
+       publicKeyPath: ~/.ssh/Ishitaeks.pub
+
