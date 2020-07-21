@@ -1,0 +1,32 @@
+I AM USING RHEL 7.5 for my work
+
+STEP1:  Create AWS account, then from root account(default) make one user profile , give admin property or give it eksclusterPolicy, save the credentials. 
+STEP2: aws-cli download 
+	command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+ 
+	command: unzip awscli-bundle.zip
+
+	command: sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+	command: sudo /usr/local/bin/python3.7 awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+	
+	command: aws --version (Check once)
+
+ 
+STEP3: aws configure , Enter Access key, private key and region as is mentined in the cred file, we saved.
+STEP4: for eks we can either use aws eks, but it is very tedious to handle. We have another alternate present that provides better functionality, ease and more advance features viz "eksctl"
+	
+	command: curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+
+	command: sudo mv /tmp/eksctl /usr/local/bin
+
+	command: eksctl version (Check once)
+
+STEP5: apply cluster.yml, this will call cloud formation in backgroud (teraform like AWS feature), 
+ 	
+	command: eksctl create cluster -f cluster.yml
+
+// To store the output in a file for later reference we can also use tee command
+	command: eksctl create cluster -f cluster.yml | tee output.txt
+
+STEP5: 
