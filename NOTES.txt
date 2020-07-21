@@ -52,4 +52,4 @@ STEP8: Now in the config file we can also setup what namespace we will be using 
 STEP9: Now our basic setup is ready , but let's make it more efficient. We can add spo-instance in our system. which will be like a alarm or metric on instance, such that if instance exceeds certain limit mentioned , then it will either stop, terminate or hibernate the system. This is very cost efficient.
 
 
-{NOTE:  TO DELETE CLUSTER USE     "eksctl delete cluster --region=ap-south-1 --name=IshitaCluster1", DELETE SSH KEYS MANUALLY IN AWS WEB UI}
+{NOTE:  TO DELETE CLUSTER USE     "eksctl delete cluster --region=ap-south-1 --name=IshitaCluster1", DELETE SSH KEYS MANUALLY IN AWS WEB UI, DELETE VPC,SECURITY GROUPS, ETC.. IF NOT DELETED}
