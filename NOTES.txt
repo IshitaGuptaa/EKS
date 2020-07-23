@@ -114,8 +114,15 @@ USER---login_cred---->>CLUSTER----rbac---->>AMAZON SERVICES
 
 	command: kubectl apply -f RBAC.yml
 
+File Explanation:
 
+Subjects: The set of users and processes that want to access the Kubernetes API.
 
+RoleBinding: Will connect the remaining entity-subjects. Given a role, which already binds API Objects and verbs, we will establish which subjects can use it. For the cluster-level, non-namespaced equivalent, there are ClusterRoleBindings.
+
+Users: These are global, and meant for humans or processes living outside the cluster.
+
+ServiceAccounts: These are namespaced and meant for intra-cluster processes running inside pods.
 
 
 
