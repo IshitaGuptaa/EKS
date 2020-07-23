@@ -59,7 +59,12 @@ STEP9: Now our basic setup is ready , but let's make it more efficient. We can a
 
 
 
+FARGATE CLUSTER-
 
+In case user wants to create serverless architecture he/she can use Fargate. 
+
+	command: eksctl create cluster -f fcluster.ymli
+Note: We are launching fargate cluster in Singapore coz Mumbai doesn't support Fargate
 
 
 
