@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata: 
+  name: efs-provisioner
+spec: 
+  selector: 
+    matchLabels: 
+     app: efs-provisioner
+  replicas: 1
+  strategy: 
+    type: Recreate
+  template: 
+    metadata: 
+      labels: 
+        app: efs-provisioner
+    spec: 
+        containers: 
+          - name: efs-provisioner
+            image: quay.io/external_storage/efs-provisioner:latest
+            env: 
+              - name: FILE_SYSTEM_ID
+                value: fs-62e7dd23
+              - name: AWS_REGION
+                value: ap-southeast-1
+              - name: PROVIONER_NAME
+                value: fargetEFS1       
+             
+            volumeMounts: 
+                - name: pv-volume
+                  mountPath: /persistentvolumes
+         
+        volumes:
+             - name: pv-volume
+               nfs:
+                   server: fs-62e7dd23.efs.ap-southeast-1.amazonaws.com 
+                   path: /persistentvolumes

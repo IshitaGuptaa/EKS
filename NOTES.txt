@@ -59,12 +59,66 @@ STEP9: Now our basic setup is ready , but let's make it more efficient. We can a
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+STEP10: 
 FARGATE CLUSTER-
 
 In case user wants to create serverless architecture he/she can use Fargate. 
 
-	command: eksctl create cluster -f fcluster.ymli
+	command: eksctl create cluster -f fcluster.yml
 Note: We are launching fargate cluster in Singapore coz Mumbai doesn't support Fargate
+
+
+NOTE: Update amazon eks config file
+	command: aws update-kubeconfig --name FargateIshitaCluster1
+
+NOTE - Now that we have launched our cluster we can make our nameserver and use it as "-n ns1(say)" everytime we are lauching any depolyment or anything or we can make this nameserver as default in our cluster config file
+	command: kubectl create namespace eksdemo
+	command: kubectl config set-context --current --namespace=eksdemo
+
+
+
+STEP 11: Creating EFS deployent
+
+As one Pod goes down EKS can launch pod in any Availability domain or zone (AD or AZ)(because, our cluster uses multiple AZ for lault tolernace), this is good for FT , but the problem is with the EBS, when the POD launches in another AD we don not have any EBS attached to it, which causes data loss. Though EBS is still present in our resouces but we to attach the POD and the EBS should be in same AZ.
+
+So we use the efs deployment, to make data peristent at all times. Even if EFS goes down , deployment will make sure it's always up and running.
+
+	command: kubectl apply -f deployment_EFS_provisioner.yml
+
+// You should change the env variables for using it without error.
+
+STEP 12: creating RBAC
+
+now note, we as a user uses login and password to connect with the fargate cluster, but the cluster uses Role based on IAM policy, which allows it to interact with other services. 
+
+
+USER---login_cred---->>CLUSTER----rbac---->>AMAZON SERVICES
+
+	command: kubectl apply -f RBAC.yml
+
+
+
+
+
+
 
 
 
