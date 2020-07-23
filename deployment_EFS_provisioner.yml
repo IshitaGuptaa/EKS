@@ -24,7 +24,7 @@ spec:
               - name: AWS_REGION
                 value: ap-southeast-1
               - name: PROVIONER_NAME
-                value: fargetEFS1       
+                value: Ishita-1/NFS-1       
              
             volumeMounts: 
                 - name: pv-volume

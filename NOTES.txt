@@ -124,7 +124,23 @@ Users: These are global, and meant for humans or processes living outside the cl
 
 ServiceAccounts: These are namespaced and meant for intra-cluster processes running inside pods.
 
+name in subjects: The user or profile name you want to give access to (if kind is user), if kind is service Account, then it matters, we use default as default
 
+RoleRef: which role are we reffering to
+kind: two types Role or ClusterRole (R capital)
+name: name of role or Clusterrole
+
+
+
+It's important to mention the Api group
+
+
+
+STEP13: Creating Storage Class and PVCs
+
+In storage class we need to mention , the provisioner. EBS or EFS.
+NOTE- In case of EBS, kubernetes can handle the provisioning. It can go to aws, create EBS based on our requirement, like Volume size or type. 
+But in case of EFS, we are using our deployment as provisioner. This EFS deployment manages the EFS resouces for us, the same way kubernets.io does for EBS, but kubernetes.io doesn't support EBS. so we use EFS deployment to make the data persitent covering all factors
 
 
 
