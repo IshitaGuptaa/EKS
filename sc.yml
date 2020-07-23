@@ -4,26 +4,28 @@ metadata:
   name: nfs-efs
 provisioner: Ishita-1/NFS-1
 ---
+
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: efs-wordpress
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "nfs-efs"
+  
 spec:
   accessModes:
     - ReadWriteMany
+  storageClassName: nfs-efs
   resources:
     requests:
       storage: 10Gi
 ---
+
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: efs-mysql
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "nfs-efs"
+  
 spec:
+  storageClassName: nfs-efs
   accessModes:
     - ReadWriteMany
   resources:

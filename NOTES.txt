@@ -143,6 +143,7 @@ NOTE- In case of EBS, kubernetes can handle the provisioning. It can go to aws, 
 But in case of EFS, we are using our deployment as provisioner. This EFS deployment manages the EFS resouces for us, the same way kubernets.io does for EBS, but kubernetes.io doesn't support EBS. so we use EFS deployment to make the data persitent covering all factors
 
 
+NOTE: in pvc to link it with sc, we can either use StorageClassName or annotions:volume.beta.kubernetes.io/storage-class. Annotion is outdated,still working but will be removed in coming kubernetes releases
 
 
 
