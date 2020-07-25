@@ -147,6 +147,11 @@ NOTE: in pvc to link it with sc, we can either use StorageClassName or annotions
 
 
 
+STEP14: amazon-efs utils download
+	command: sudo yum -y install git
+	command: git clone https://github.com/aws/efs-utils
+	command: sudo yum -y install make
+    
 
 
 
@@ -174,4 +179,55 @@ STEP 11: Now we will setup account and put tiller in use.
 	command: kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 	command: helm init --service-account tiller --upgrade
 
+
+
+
+STEP{}: Let's create our separate namespace for prometheus and garafana for monitoringa nd better managemnet, also since they are a part of private cluster IP we are going to do the port forwarding, so for better management and security, better to put it in separate namespace. 
+Note - there is difference in Port forwarding and normal pod expose. 
+We use Expose for DMZ pods and port forwarding for the one with CLuster IP. Port forwading is temporary and thus we need to run the command after every reboot and is mostly recommended for devlopment or troubleshooting phase and not for production env.
+
+	command: kubectl create namespace prometheus
+
+	command: helm install  stable/prometheus     --namespace prometheus     --set alertmanager.persistentVolume.storageClass="gp2"     --set server.persistentVolume.storageClass="gp2"
+
+	command kubectl get svc -n prometheus // to check
+
+	command: kubectl -n prometheus  port-forward svc/flailing-buffalo-prometheus-server  8888:80 //EXPOSE 
+	
+
+
+
+STEP{}: We'll do the same for garafana and use prometheus for it's data source. 
+We will create our own workspace and that will give us the graphical presentation of our kubenetes functioning
+
+
+	command: kubectl create namespace grafana
+
+	command: helm install stable/grafana  --namespace grafana     --set persistence.storageClassName="gp2" --set adminPassword='GrafanaAdm!n'    --set datasources."datasources\.yaml".apiVersion=1     --set datasources."datasources\.yaml".datasources[0].name=Prometheus   --set datasources."datasources\.yaml".datasources[0].type=prometheus    --set datasources."datasources\.yaml".datasources[0].url=http://prometheus-server.prometheus.svc.cluster.local   --set datasources."datasources\.yaml".datasources[0].access=proxy     --set datasources."datasources\.yaml".datasources[0].isDefault=true  --set service.type=LoadBalancer
+
+
+	command: kubectl get  secret  worn-bronco-grafana   --namespace  grafana  -o yaml
+
+
+
+OR WE CAN USE YML FILES TO LAUNCH AND HANDLE PROMETHEUS AND GRAFANA
+
+
+
+ADDITION INFO:
+
+incase you encounter problem like "Signature expired: 20200724T112735Z is now earlier than 20200724T113039Z" , then sync the time with the sever usii=ng following commad.
+
+	command:sudo ntpdate pool.ntp.org
+Or you can create on cron file to do it daily automatically.
+
+file-
+#!/bin/sh
+# sync server time
+/usr/sbin/ntpdate pool.ntp.org >> /tmp/ntpdate.log
+
+make it executable
+chmod +x /etc/cron.daily/ntpdate
+
+		
 
